@@ -24,7 +24,7 @@ define(['N/ui/dialog'], (dialog) => {
         console.log ('Success' + result);
     }
     function fail(reason) {
-        console.log('Alert Failed' + reason)
+        console.log('Alert Failed' + reason);
     }
 });
 
