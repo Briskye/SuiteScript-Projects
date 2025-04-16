@@ -3,29 +3,26 @@
  * @NScriptType ClientScript
  */
 
-define(['N/log'], (log) => {
+define([], () => {
 
     const fieldChanged = (context) => {
-        try {
+
             const currentRecord = context.currentRecord;
             const fieldId = context.fieldId;
 
-            if (fieldId === 'entitystatus') {
-                const newValue = currentRecord.getText({
-                    fieldId: 'entitystatus'
+            if (fieldId === 'comments') {
+                const newValue = currentRecord.getValue({
+                    fieldId: 'comments'
                 });
 
-                alert('Entity Status changed to: '+ newValue);
+                console.log('Comments changed to: ' + newValue);
+                
+                alert('Comments changed to: ' + newValue);
             }
-        } catch (e) {
-            log.error({
-                title: 'Error in fieldChanged',
-                details: e.message
-            });
         }
-    };
-
-    return {
-        fieldChanged
-    };
+        return {
+            fieldChanged
+        };
 });
+
+    
