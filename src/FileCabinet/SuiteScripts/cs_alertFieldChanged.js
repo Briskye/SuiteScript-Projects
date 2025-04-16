@@ -3,7 +3,7 @@
  * @NScriptType ClientScript
  */
 
-define([], () => {
+define(['N/ui/dialog'], (dialog) => {
 
     const fieldChanged = (context) => {
 
@@ -17,7 +17,11 @@ define([], () => {
 
                 console.log('Comments changed to: ' + newValue);
                 
-                alert('Comments changed to: ' + newValue);
+                dialog.alert({
+                    title: 'Comments updated',
+                    message: 'Comments field was changed to: ' + newValue
+                });
+                
             }
         }
         return {
