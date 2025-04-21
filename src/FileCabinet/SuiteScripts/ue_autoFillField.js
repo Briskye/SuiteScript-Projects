@@ -7,7 +7,7 @@ define(['N/log'], (log) => {
 
     function beforeSubmit(context) {
         try {
-            if (context.type !== context.UserEventType.CREATE && context.type !== context.UserEventType.EDIT) 
+            if (context.type !== context.UserEventType.EDIT) 
                 return;
 
             var contactRecord = context.newRecord;
