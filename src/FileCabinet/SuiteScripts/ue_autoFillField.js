@@ -5,26 +5,36 @@
 
 define(['N/log'], (log) => {
 
-    const beforeSubmit = (context) => {
-        if (context.type === context.UserEventType.CREATE || context.type === context.UserEventType.EDIT) {
-            const customerRecord = context.newRecord;
+    function beforeSubmit(context) {
+        try {
+            if (context.type !== context.UserEventType.CREATE && context.type !== context.UserEventType.EDIT) 
+                return;
 
-            const companyName = customerRecord.getValue({ fieldId: 'companyname'});
+            var contactRecord = context.newRecord;
+            var firstName = contactRecord.getValue({ fieldId: 'firstname' });
 
-            if (companyName && companyName.toLowerCase().includes('link')) {
-                const defaultWebAddress = 'https://www.link.com';
+            if (firstName && firstName.toLowerCase() === 'john') {
 
-                log.debug('Company name is "link"', 'Setting web address to ' + defaultWebAddress);
-
-                customerRecord.setValue({
-                    fieldId: 'url',
-                    value: defaultWebAddress
+                contactRecord.setValue({
+                    fieldId: 'firstname',
+                    value: 'John'
                 });
+
+                contactRecord.setValue({
+                    fieldId: 'lastname',
+                    value: 'Mendoza'
+                });
+
+                log.debug('Contact Updated', 'Firstname set to John, Lastname set to Mendoza');
             }
         }
-    };
 
+        catch (e) {
+            log.error('Error in beforeSubmit', e.message);
+        }
+    }
+    
     return {
-        beforeSubmit
+        beforeSubmit: beforeSubmit
     };
 });
