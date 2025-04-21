@@ -8,7 +8,7 @@ define(['N/ui/dialog'], (dialog) => {
     function pageInit() {
         let myAlert = {
             title: 'Hi there!',
-            message: 'Click Ok to continue.'
+            message: `Click <b>Ok</b> to continue.`
         };
 
         // to display alert dialog
