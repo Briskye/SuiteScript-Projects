@@ -16,8 +16,6 @@ define(['N/ui/dialog'], (dialog) => {
                 const newValue = currentRecord.getValue({
                     fieldId: 'comments'
                 });
-                // Log the new value
-                console.log('Comments changed to: ' + newValue);
 
                 // Show alert dialog that the field was updated
                 dialog.alert({
