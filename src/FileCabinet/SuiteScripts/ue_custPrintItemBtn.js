@@ -9,20 +9,13 @@ define(['N/url', 'N/record'], (url, record) => {
         if(context.type !== context.UserEventType.VIEW) return;
 
         const form = context.form;
-        const itemId = context.newRecord.id;
 
-        const suiteletURL = url.resolveScript({
-            scriptId: 'customscript_print_item_suitelet',
-            deploymentId: 'customdeploy_print_item_suitelet',
-            params: {
-                itemId: itemId
-            }
-        });
+        form.clientScriptModulePath = 'SuiteScripts/John Files/cs_print_item.js';
 
         form.addButton({
             id: 'custpage_print_item_btn',
             label: 'Print Item',
-            functionName: `function() { window.open('$suiteletURL}', '_blank'); }`
+            functionName: 'printItem'
         });
     }
     
