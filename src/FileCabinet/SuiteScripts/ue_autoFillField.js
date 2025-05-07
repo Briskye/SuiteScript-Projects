@@ -11,15 +11,19 @@ define(['N/log'], (log) => {
                 return;
 
             var contactRecord = context.newRecord;
+
+            // Get the value of the 'firstname' field from the record.
             var firstName = contactRecord.getValue({ fieldId: 'firstname' });
 
+            // Check if 'firstName' has a value and if it equals 'john' (case-insensitive).
             if (firstName && firstName.toLowerCase() === 'john') {
 
+                // Set the 'firstname' field to 'John' with proper capitalization.
                 contactRecord.setValue({
                     fieldId: 'firstname',
                     value: 'John'
                 });
-
+                // Set the 'lastname' field to 'Mendoza'.
                 contactRecord.setValue({
                     fieldId: 'lastname',
                     value: 'Mendoza'
