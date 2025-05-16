@@ -2,37 +2,41 @@
  * @NApiVersion 2.1
  * @NScriptType UserEventScript
  */
+define(['N/search', 'N/log', 'N/record'], (search, log, record) => {
+  
+  const afterSubmit = (context) => {
+    try {
+      if (context.type === context.UserEventType.CREATE || context.type === context.UserEventType.EDIT) {
+        const salesOrder = context.newRecord;
+        const soId = salesOrder.id;
 
-define(['N/search','N/log'], (search, log) => {
+        const savedSearchId = 'customsearch_transaction_test'; 
 
-    function afterSubmit (context) {
-        try {
-            const savedSearchId = 'customsearch_transaction_test';
-            const transactionSearch = search.load({
-                id: savedSearchId
-            });
+        // Load the Saved Search 
+        const savedSearch = search.load({ id: savedSearchId });
 
-            const searchResults = transactionSearch.run().getRange({
-                start: 0,
-                end: 10
-            });
+        // Run the Saved Search and iterate through each result
+        let resultCount = 0;
+        savedSearch.run().each(result => {
+          resultCount++;  // Increment result counter
 
-            searchResults.forEach(function(result){
-                const tranDate = result.getValue({ name: 'trandate'});
-                const entity = result.getValue({ name: 'entity'});
-                const type = result.getValue({ name: 'type' });
-                const amount = result.getValue({ name: 'amount'});
-                
+          const entity = result.getText({ name: 'entity' });
+          const tranDate = result.getValue({ name: 'trandate' });
+          const amount = result.getValue({ name: 'amount' });
+          
+          // Log the result in the execution log
+          log.debug(`Search Result #${resultCount}`, `Name: ${entity} - Date: ${tranDate} - Amount: ${amount} `);
 
-                log.debug('Transaction Result', `Tran ID: ${tranDate}, Entity: ${entity}, Type: ${type}, Amount: ${amount}`);
-            });
-        } catch (e)  {
-            log.error({
-                title: 'Error executing Saved Search',
-                details: e.message
-            });
-        }
+          return true; // continue to next result
+        });
+
+        // Showing how many results were processed
+        log.audit('Saved Search Completed', `Total results: ${resultCount}`);
+      }
+    } catch (error) {
+      log.error('Error in afterSubmit', error);
     }
+  };
 
-    return { afterSubmit };
+  return { afterSubmit };
 });
