@@ -57,30 +57,31 @@ define(['N/record', 'N/search', 'N/log'], (record, search, log) => {
             }
         
 
-        const searchTitle = 'Inventory Items Custom Base Price';
-        const searchId = 'customsearch_inventory_item';
+            
+        // const searchTitle = 'Inventory Items Custom Base Price';
+        // const searchId = 'customsearch_inventory_item';
 
-        try {
-            search.load({ id: searchId });
-            log.debug('Search Exists, skipping creation.');
-        } catch (e) {
-            log.debug('Creating new saved search:', searchTitle);
-            const newSearch = search.create({
-                type: search.Type.INVENTORY_ITEM,
-                title: searchTitle,
-                id: searchId,
-                filters: [
-                    ['custitem_lm_jpy_price', 'isnotempty', '']
-                ],
-                columns: [
-                    'itemid',
-                    'custitem_lm_jpy_price'
-                ]
-            });
+        // try {
+        //     search.load({ id: searchId });
+        //     log.debug('Search Exists, skipping creation.');
+        // } catch (e) {
+        //     log.debug('Creating new saved search:', searchTitle);
+        //     const newSearch = search.create({
+        //         type: search.Type.INVENTORY_ITEM,
+        //         title: searchTitle,
+        //         id: searchId,
+        //         filters: [
+        //             ['custitem_lm_jpy_price', 'isnotempty', '']
+        //         ],
+        //         columns: [
+        //             'itemid',
+        //             'custitem_lm_jpy_price'
+        //         ]
+        //     });
 
-            newSearch.save();
-            log.debug('Saved Search Created:', searchId);
-        } 
+        //     newSearch.save();
+        //     log.debug('Saved Search Created:', searchId);
+        // } 
         } catch (e) {
             log.error('Error in afterSubmit', e);
         }
@@ -88,6 +89,6 @@ define(['N/record', 'N/search', 'N/log'], (record, search, log) => {
 
     return {
         afterSubmit: afterSubmit
-    }
+    };
 });
 
