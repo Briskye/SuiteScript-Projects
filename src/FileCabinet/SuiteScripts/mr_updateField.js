@@ -5,11 +5,11 @@
 
 define(['N/record', 'N/search'], (record, search) => {
 
-    const DEPARTMENT_ID = '2';
+    const DEPARTMENT_ID = '2'; // Department Internal ID 
 
     function getInputData() {
         return search.load({
-            id: 'customsearch_inventory_item'
+            id: 'customsearch_inventory_item' // Existing Saved Search... Can also create a new saved search.
         });
     }
 
