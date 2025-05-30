@@ -3,7 +3,7 @@
  * @NScriptType Suitelet
  */
 
-define(['N/ui/serverWidget'], (serverWidget) => {
+define(['N/ui/serverWidget', 'N/record'], (serverWidget, record) => {
 
     const onRequest = (context) => {
         if(context.request.method === 'GET') {
@@ -56,7 +56,22 @@ define(['N/ui/serverWidget'], (serverWidget) => {
             const rating = context.request.parameters.custpage_rating;
             const comments = context.request.parameters.custpage_comments;
 
-            log.debug('Survey Submission', { name, email, rating, comments });
+            try {
+                // Create a 
+                const rec = record.create({
+                    type: 'customrecord_survey_response',
+                    isDynamic: true
+                });
+
+                rec.setValue({ fieldId: 'name', value: name });
+                rec.setValue({ fieldId: 'custrecord_survey_email', value: email});
+                rec.setValue({ fieldId: 'custrecord_survey_rating', value: rating});
+                rec.setValue({ fieldId: 'custrecord_survey_comments', value: comments});
+
+                const recId = rec.save();
+
+                log.debug('Survey Saved', `Record ID: ${recId}`);
+            
 
             // Show a Thank you message
             const form = serverWidget.createForm({ title: 'Thank You!' });
@@ -65,12 +80,16 @@ define(['N/ui/serverWidget'], (serverWidget) => {
                 type: serverWidget.FieldType.INLINEHTML,
                 label: 'Thank You Message'
             }).defaultValue = `<div style="font-size: 14px;">
-                <p>Thanks <b>${name}</b> for completing the survey!</p>
-                <p>Your rating: <b>${rating}</b><br>
-                Your comments: <i>${comments}</i></p>
+                <p>Thanks <b>${name || 'Guest'}</b> for completing the survey!</p>
+                <p><b><i>Your Response has been Recorded.<i></b></p>
             </div>`;
 
             context.response.writePage(form);
+
+            } catch (e) {
+                log.error('Error Saving Survey Response', e.message);
+                throw e;
+            }
         }
     };
 
