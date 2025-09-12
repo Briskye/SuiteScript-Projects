@@ -45,8 +45,13 @@ define(['N/search', 'N/email', 'N/runtime'], (search, email, runtime) => {
         const customerId = context.key;
         const invoices = context.values.map(val => JSON.parse(val));
 
-        let body = 'Dear Customer, <br/><br/>The following invoices are overdue:<br/><ul>';
+        const uniqueInvoices = {};
         invoices.forEach(inv => {
+            uniqueInvoices[inv.invoiceId] = inv;
+        });
+
+        let body = 'Dear Customer, <br/><br/>The following invoices are overdue:<br/><ul>';
+        Object.values(uniqueInvoices).forEach(inv => {
             body += `<li>Invoice #${inv.tranid} - Due: ${inv.duedate} - Amount: ${inv.total}</li>`;
         });
         body += '</ul><br/>Please make your payment at your earliest convenience.<br/><br/>Thank you.';
@@ -69,10 +74,13 @@ define(['N/search', 'N/email', 'N/runtime'], (search, email, runtime) => {
                 author: 718,
                 recipients: customerEmail,
                 subject: 'Overdue Invoice Reminder',
-                body: body
+                body: body,
+                relatedRecords: {
+                    entityId: customerId
+                }
             });
 
-            log.audit('Email Sent', `Customer ${customerId} - ${invoices.length} invoices`);
+            log.audit('Email Sent', `Customer ${customerId} - ${Object.keys(uniqueInvoices).length} invoices sent to ${customerEmail}`);
         } catch (e) {
             log.error('Email Failed', `Customer ${customerId}: ${e.message}`);
         }
